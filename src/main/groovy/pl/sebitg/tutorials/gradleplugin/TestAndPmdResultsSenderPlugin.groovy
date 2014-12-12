@@ -12,6 +12,10 @@ class TestAndPmdResultsSenderPlugin implements Plugin<Project> {
 	@Override
 	public void apply(Project arg0) {
 		
+		arg0.task('someTask') << {
+			println "Hello someTask world!"
+		}
+		
 	}
 
 }

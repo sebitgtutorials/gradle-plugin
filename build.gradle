@@ -3,6 +3,10 @@ apply plugin: 'maven'
 apply plugin: 'eclipse'
 
 
+group='pl.sebitg'
+archivesBaseName='gradleplugin'
+version='0.1.0'
+
 repositories {
 	mavenCentral()
 	mavenLocal()
@@ -10,19 +14,16 @@ repositories {
 
 dependencies {
     compile gradleApi()
-	compile 'commons-lang:commons-lang:2.3'
-	compile 'org.codehaus.groovy:groovy-all:2.3.7'
-	compile 'org.apache.velocity:velocity:1.7'
-	compile 'org.apache.velocity:velocity-tools:2.0'
-	compile 'commons-io:commons-io:2.4'
-	
 	groovy localGroovy()
 }
 
 jar {
-	from configurations.compile.collect { 
-		it.isDirectory() ? it : zipTree(it) 
+	doFirst {
+		from configurations.compile.collect { 
+			it.isDirectory() ? it : zipTree(it) 
+		}
 	}
+	exclude 'META-INF/*.RSA', 'META-INF/*.SF','META-INF/*.DSA'
 }
 
 sourceSets {
@@ -42,23 +43,4 @@ sourceSets {
       srcDir 'src/resources'
     }
   }
-}
-
-configurations {
-	deployerJars
-}
-
-group='pl.sebitg'
-archivesBaseName='gradleplugin'
-version='0.1.0'
-
-/**
- * Maven local deploy
- */
-uploadArchives {
-	repositories.mavenDeployer {
-		repository {
-			mavenLocal()
-		}
-	}
 }
