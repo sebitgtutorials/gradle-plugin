@@ -25,20 +25,18 @@ class SendEmailTask extends DefaultTask {
 	
 	@TaskAction
 	void taskAction() {
-		
 		def gradle = getProject().getGradle()
 		def taskGraph = gradle.getTaskGraph()
 		taskGraph.allTasks.each { item ->
 			if(("build" == item.name && item.state.executed) || 
-				("test" == item.name && item.state.executed && item.state.failure!=null) ||
-				("compileJava" == item.name && item.state.executed && item.state.failure!=null)) {
+				("test" == item.name && item.state.failure!=null) ||
+				("compileJava" == item.name && item.state.failure!=null)) {
 				sendMail(item.state)
 			}
 		}
 	}
 	
 	void sendMail(TaskState state) {
-		
 		Session session = Session.getInstance( getMailProps() , new javax.mail.Authenticator() {
 					
 			protected javax.mail.PasswordAuthentication getPasswordAuthentication() {
